@@ -3,3 +3,11 @@
 # Dependency directories
 node_modules/
 
+# env variables
+.env
+
+# graphcool targets
+.graphcoolrc
+
+# yml
+graphcool.yml

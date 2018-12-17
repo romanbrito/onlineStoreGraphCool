@@ -1,23 +1,70 @@
 # The following types define the data model of the example service
 # based on which the GraphQL API is generated
 
-type User @model {
+enum Permission {
+  ADMIN
+  USER
+  ITEMCREATE
+  ITEMUPDATE
+  ITEMDELETE
+  PERMISSIONUPDATE
+}
+
+type User @model{
   id: ID! @isUnique
-  name: String
-  dateOfBirth: DateTime
+  name: String!
+  email: String! @isUnique
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: [Permission!]!
+#  cart: [CartItem!]! @relation(name: "UserCart")
+#  item: [Item!]! @relation(name: "UserItem")
+#  orderItem: [OrderItem!]! @relation(name: "UserOrderItem")
+#  order: Order! @relation(name: "UserOrder")
+}
 
-  # Uncomment below - you can declare relations between models like this
+type Item @model{
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  description: String!
+  image: String
+  largeImage: String
+  price: Int!
+#  user: User! @relation(name: "UserItem")
+#  cartItem: CartItem! @relation(name: "ItemCart")
+}
 
-  # posts: [Post!]! @relation(name: "UserPosts")
+type CartItem @model{
+  id: ID! @isUnique
+  quantity: Int! @default(value: 1)
+#  item: Item @relation(name: "ItemCart")
+#  user: User! @relation(name: "UserCart")
+}
+
+type OrderItem @model{
+  id: ID! @isUnique
+  title: String!
+  description: String!
+  image: String!
+  largeImage: String!
+  price: Int!
+  quantity: Int! @default(value: 1)
+#  user: User @relation(name: "UserOrderItem")
+#  order: Order! @relation(name: "ItemOrder")
+}
+
+type Order @model{
+  id: ID! @isUnique
+#  items: [OrderItem!]! @relation(name: "ItemOrder")
+  total: Int!
+#  user: User! @relation(name: "UserOrder")
+  charge: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 
-# Uncomment the model below as well
 
-# type Post @model {
-#   id: ID! @isUnique
-#   title: String!
-#
-#   # Every relation also required a back-relation (to determine 1:1, 1:n or n:m)
-#   author: User! @relation(name: "UserPosts")
-# }
